@@ -16,7 +16,6 @@ itertools = "0.13"
 rand = "0.8"
 log = "0.4"
 rand_distr = "0.4"
-twemoji-rs = "0.1"
 
 [dev-dependencies]
 env_logger = "0.11"

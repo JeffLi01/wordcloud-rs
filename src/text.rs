@@ -1,7 +1,7 @@
 use fontdue::{Font, layout::{Layout, CoordinateSystem, TextStyle}, Metrics};
 use image::{RgbaImage, GenericImage, Rgba, Pixel, GenericImageView};
 use itertools::enumerate;
-use super::{hxbitmap::{HXBitmap}, rasterisable::Rasterisable, indexed_chars::IndexedChars};
+use super::{hxbitmap::HXBitmap, rasterisable::Rasterisable};
 use std::{iter::zip, fmt::Display};
 
 pub struct Text {
@@ -16,8 +16,7 @@ impl Text {
         let fonts = [font];
         let mut layout = Layout::new(CoordinateSystem::PositiveYDown);
         layout.append(&fonts, &TextStyle::new(text.as_str(), size, 0));
-        let indexed = IndexedChars::new(&text);
-        let glyphs: Vec<_> = indexed.chars.iter().map(|c| fonts[0].rasterize(*c, size)).collect();
+        let glyphs: Vec<_> = text.chars().map(|c| fonts[0].rasterize(c, size)).collect();
         Self { text, layout, glyphs, color }
     }
 }
