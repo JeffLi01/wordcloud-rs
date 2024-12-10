@@ -11,18 +11,23 @@ fn gen_counter(length: usize) -> HashMap<String, f32> {
     counter
 }
 
-fn wordcloud(counter: &HashMap<String, f32>) {
+fn bench_wordcloud(counter: &HashMap<String, f32>) {
     // Prepare the tokens
     let tokens = counter.into_iter()
         .map(|(k, v)| (Token::Text(k.to_string()), *v))
         .collect();
     // Generate the word-cloud
-    let wc = WordCloud::new()
-        .font(r#"/usr/share/fonts/truetype/wqy/wqy-microhei.ttc"#)
-        .generate(tokens);
+    let builder = WordCloud::new();
+    #[cfg(target_os = "windows")]
+    let mut builder = builder.font(r#"C:\Windows\Fonts\msyh.ttc"#);
+    #[cfg(target_os = "linux")]
+    let mut builder = builder.font(r#"/usr/share/fonts/truetype/wqy/wqy-microhei.ttc"#);
     // Save it
     let filename = format!("wordcloud-{}.png", counter.len());
-    wc.save(filename).unwrap();
+    builder
+        .generate(tokens)
+        .save(filename)
+        .unwrap();
 }
 
 fn criterion_benchmark(c: &mut Criterion) {
@@ -31,7 +36,7 @@ fn criterion_benchmark(c: &mut Criterion) {
     // precision and counteract the resulting noise.
     group.significance_level(0.1).sample_size(10);
     let counter = gen_counter(100);
-    group.bench_function("wordcloud-100", |b| b.iter(|| wordcloud(black_box(&counter))));
+    group.bench_function("wordcloud-100", |b| b.iter(|| bench_wordcloud(black_box(&counter))));
     group.finish();
 }
 

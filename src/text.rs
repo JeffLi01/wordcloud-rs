@@ -12,7 +12,7 @@ pub struct Text {
 }
 
 impl Text {
-    pub fn new(text: String, font: Font, size: f32, color: Rgba<u8>) -> Self {
+    pub fn new(text: String, font: &Font, size: f32, color: Rgba<u8>) -> Self {
         let fonts = [font];
         let mut layout = Layout::new(CoordinateSystem::PositiveYDown);
         layout.append(&fonts, &TextStyle::new(text.as_str(), size, 0));

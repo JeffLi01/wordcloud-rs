@@ -27,7 +27,7 @@ fn wordcloud(font: &Font, dim: (usize, usize), mut tokens: Vec<(Token, f32)>, co
         debug!(target: "wordcloud", "{} {}", size, token);
         loop {
             let rasterisable: Box<dyn Rasterisable> = match token.clone() {
-                Token::Text(text) => Box::new(Text::new(text, font.clone(), (2.+size*c)*adjust, colors.get())),
+                Token::Text(text) => Box::new(Text::new(text, &font, (2.+size*c)*adjust, colors.get())),
                 Token::Img(image) => Box::new(Image::new(image, (2.+size*c)*adjust*1.5))
             };
             if wc.add(rasterisable) {
